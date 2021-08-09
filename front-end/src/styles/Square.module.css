@@ -1,0 +1,15 @@
+
+.square {
+    font-family: "Permanent Marker", cursive;
+    width: 33.333%;
+    height: 50px;
+    background: #FAAD80;
+    box-shadow: 2px 2px 2px 2px #FF3D68;
+    border: 2px solid #FF3D68;
+    cursor: pointer;
+    line-height: 34px;
+    text-align: center;
+    font-size: 40px;
+    float: left;
+    color: #A73489;
+}

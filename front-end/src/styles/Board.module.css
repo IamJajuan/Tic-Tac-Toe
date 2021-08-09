@@ -1,0 +1,21 @@
+
+.board {
+
+  width: 300px;
+   
+}
+.turn {
+
+    text-align: center;
+    font-weight: 700;
+    color: #A73489;
+    margin: 20px auto;
+    font-size: 1.5em;
+}
+
+.title {
+
+  color: #A73489;
+  margin: 10px auto;
+  
+}
