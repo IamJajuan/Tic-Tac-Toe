@@ -102,12 +102,12 @@
  
  var isEven = Math.floor(Math.random() * 1000 ) % 2 === 0
  
+ var rooms = {}
  
  io.on('connection', socket => {
  
    const count = io.engine.clientsCount;
    let roomNum = count/2
-   const isLoading = !Number.isInteger(roomNum) 
    console.log("Current Room Number",roomNum)
    roomNum = Math.round(roomNum)
  
@@ -128,22 +128,35 @@
       socket.emit('Join Game',isEven)
      
       isEven = !isEven
+
+      console.log(socket.rooms)
+
+      if (rooms.hasOwnProperty(room)) {
+        
+        rooms[room] ++
+      }
+
+      else {
+
+        rooms[room] = 1
+      }
+      
  
-      !isLoading && io.to(room).emit('Start Game',room)
+      rooms[room] === 2 && io.to(room).emit('Start Game',room)
     })
  
  
-    socket.on('Rematch',(res,room) => {
+    socket.on('Rematch',(res,r) => {
  
  
-     socket.to(room).emit('Rematch',res)
+     socket.to(r).emit('Rematch',res)
     })
  
-    socket.on('Mark',(room,i)=> {
+    socket.on('Mark',(r,i)=> {
  
  
  
-     io.to(room).emit('Mark', i, socket.data.isX)
+     io.to(r).emit('Mark', i, socket.data.isX)
     })
  
  
@@ -151,12 +164,12 @@
  
   
  
-   socket.on('Leave Game', (room,msg="User left, click to go to the main menu") => {
+   socket.on('Leave Game', (r,msg="User left, click to go to the main menu") => {
  
-     console.log('Leave Room',room)
+     console.log('Leave Room',r)
  
      
-     io.to(room).emit('Leave Game',msg)
+     io.to(r).emit('Leave Game',msg)
    })
  
 
@@ -166,11 +179,12 @@
      console.log("Reason",reason)
      console.log("Socket",socket.rooms)
  
-     socket.rooms.forEach(room => {
+     socket.rooms.forEach(r => {
  
-       if (room !== socket.id) {
- 
-         socket.to(room).emit('Leave Game',"User left, click to go to the main menu")
+       if (r !== socket.id) {
+         
+         rooms[r] = 0
+         socket.to(r).emit('Leave Game',"User left, click to go to the main menu")
          
          
        }

@@ -106,6 +106,7 @@ export default function TwoPlayer() {
 
             
               setMsg(msg)
+              socketRef.current.close()
 
                   
          })
