@@ -1,1 +1,1 @@
-export const ENDPOINT = 'https://tic-tac-toe101.herokuapp.com/'
+export const ENDPOINT = 'http://localhost:3001/'

@@ -103,6 +103,28 @@
  var isEven = Math.floor(Math.random() * 1000 ) % 2 === 0
  
  var rooms = {}
+
+ /**
+ * Find a room that has one id
+ * 
+ */
+  const findRoom = () => {
+
+    for(let r of Object.keys(rooms)) {
+    
+      console.log("Match Room " + r + " Len " + rooms[r].length)
+      if (rooms[r].length === 1) {
+        console.log('Match')
+        console.log(r)
+        return r
+      }
+
+    }
+    console.log('No Match')
+    return ''
+    
+  
+   }
  
  io.on('connection', socket => {
  
@@ -114,10 +136,14 @@
    let room = `Room-${roomNum}`
    console.log(`Client Count ${count} roomNum ${roomNum}`)
    console.log(room)
+   let matchingRoom = findRoom()
+   room = matchingRoom ? matchingRoom : room
+ 
  
  
  
     socket.join(room)
+    console.log("Socket Rooms" + socket.rooms)
  
  
  
@@ -133,16 +159,16 @@
 
       if (rooms.hasOwnProperty(room)) {
         
-        rooms[room] ++
+        rooms[room].push(socket.id)
       }
 
       else {
 
-        rooms[room] = 1
+        rooms[room] = [socket.id]
       }
       
  
-      rooms[room] === 2 && io.to(room).emit('Start Game',room)
+      rooms[room].length === 2 && io.to(room).emit('Start Game',room)
     })
  
  
@@ -183,7 +209,7 @@
  
        if (r !== socket.id) {
          
-         rooms[r] = 0
+         rooms[r] = []
          socket.to(r).emit('Leave Game',"User left, click to go to the main menu")
          
          
